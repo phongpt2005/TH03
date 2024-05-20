@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý sinh viên</title>
+    <style>
+      /* Reset CSS */
+body, h1, h2, h3, p, ul, ol, li, figure, figcaption, blockquote, dl, dd, form, fieldset, legend, input, textarea, button, select {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+/* Table styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+    </style>
+</head>
+<body>
+    <h1>Quản lý sinh viên</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>MSV</th>
+                <th>Tên</th>
+                <th>Lớp</th>
+                <th>SDT</th>
+                <th>Ngày tháng năm sinh</th>
+                <th>Nơi sinh</th>
+                <th>Thành tích</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody id="student-table-body">
+        </tbody>
+    </table>
+
+    <script>
+        async function fetchStudents() {
+            try {
+                const response = await fetch('http://127.0.0.1:8000/students');
+                if (response.ok) {
+                    const students = await response.json();
+                    const tableBody = document.getElementById('student-table-body');
+                    students.forEach((student, index) => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${index + 1}</td>
+                            <td>${student.msv}</td>
+                            <td>${student.name}</td>
+                            <td>${student.class_name}</td>
+                            <td>${student.phone}</td>
+                            <td>${student.dob}</td>
+                            <td>${student.birth_place}</td>
+                            <td>${student.achievement}</td>
+                            <td>
+                                <button>Sửa</button>
+                                <button>Xem</button>
+                            </td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                } else {
+                    console.error('Failed to fetch students');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        window.onload = fetchStudents;
+    </script>
+</body>
+</html>
